@@ -22,8 +22,13 @@ int main(int argc, char *argv[]) {
     if (strcmp(input, "exit") == 0) {
       break; // Exit the shell
     }
+
     // 3. Print: Display the output or error message.
-    printf("%s: command not found\n", input);
+    if (strncmp(input, "echo", 5) == 0) {
+      printf("%s\n", input + 5);
+    } else {
+      printf("%s: command not found\n", input);
+    }
     // 4. Loop: Return to step 1 and wait for the next command.
   }
 
