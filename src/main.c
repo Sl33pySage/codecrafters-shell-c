@@ -28,6 +28,7 @@ int main(int argc, char *argv[]) {
       printf("%s: command not found\n", input);
     }
     // 4. Loop: Return to step 1 and wait for the next command.
+    printf("%s: command not found\n", input);
   }
 
   return 0;
