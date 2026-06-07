@@ -9,13 +9,13 @@ int main(int argc, char *argv[]) {
   // A REPL (Read-Eval-Print-Loop) is an interactive loop that forms the core of
   // a shell. It follows a repeating cycle:
   while (1) {
+    printf("$ ");
+
+    // 1. Read: Display a prompt and wait for user input.
     // Wait for user input
     char input[100];
-    // 1. Read: Display a prompt and wait for user input.
-    printf("$ ");
     fgets(input, 100, stdin);
     // 2. Eval: Parse and execute the command.
-
     // Remove the trailing new line
     input[strlen(input) - 1] = '\0';
 
