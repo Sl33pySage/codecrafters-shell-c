@@ -5,30 +5,43 @@
 int main(int argc, char *argv[]) {
   // Flush after every printf
   setbuf(stdout, NULL);
+  char command[1024];
 
-  // A REPL (Read-Eval-Print-Loop) is an interactive loop that forms the core of
-  // a shell. It follows a repeating cycle:
   while (1) {
     printf("$ ");
 
-    // 1. Read: Display a prompt and wait for user input.
-    // Wait for user input
-    char input[100];
-    fgets(input, 100, stdin);
-    // 2. Eval: Parse and execute the command.
-    // Remove the trailing new line
-    input[strlen(input) - 1] = '\0';
+    fgets(command, sizeof(command), stdin);
+    command[strcspn(command, "\n")] = '\0';
 
-    // 3. Print: Display the output or error message.
-    if (strcmp(input, "exit") == 0) {
-      break; // Exit the shell
-    } else if (strncmp(input, "echo", 5) == 0) {
-      printf("%s\n", input + 5);
+    char *builtin = strtok(command, " ");
+    char *arg = strtok(NULL, "");
+    if (builtin == NULL)
+      continue;
+
+    if (strcmp(builtin, "exit") == 0) {
       break;
+    } else if (strcmp(builtin, "echo") == 0) {
+      printf("%s\n", arg);
+    } else if (strcmp(builtin, "type") == 0) {
+      if (!strcmp(arg, "exit") || !strcmp(arg, "echo") ||
+          !strcmp(arg, "type")) {
+        printf("%s is a shell builtin\n", arg);
+      } else {
+        char *path_env = getenv("PATH");
+        // A buffer for the path I can traverse and do string manipulation on
+        char pathbuf[3069];
+
+        if (path_env != NULL) {
+          printf("Current Path:\n%s\n", path_env);
+        } else {
+          printf("PATH env var is not found\n");
+        }
+      }
+      printf("%s: not found\n", arg);
+
     } else {
-      printf("%s: command not found\n", input);
+      printf("%s: command not found\n", builtin);
     }
-    // 4. Loop: Return to step 1 and wait for the next command.
   }
   return 0;
 }
