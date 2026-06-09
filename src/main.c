@@ -34,34 +34,26 @@ int main(int argc, char *argv[]) {
       if (!strcmp(arg, "exit") || !strcmp(arg, "echo") ||
           !strcmp(arg, "type")) {
         printf("%s is a shell builtin\n", arg);
-        break;
+
       } else {
         char *path_env = getenv("PATH");
-        // A buffer for the path I can traverse and do string manipulation on
-        char *pathbuf = strtok(path_env, PATH_LIST_SEPARATOR);
+        char *token = strtok(path_env, PATH_LIST_SEPARATOR);
 
-        if (path_env != NULL) {
-
-          // printf("Current Path:\n%s\n", path_env);
-          while (pathbuf != NULL) {
-            printf("PathBuf:\n%s\n", pathbuf);
-            pathbuf = strtok(NULL, PATH_LIST_SEPARATOR);
-            // access(arg, X_OK) == 0 ||
-            if (strcmp(arg, pathbuf)) {
-              printf("Success: file \narg: %s exists in \npathbuf: %s and "
-                     "has execution "
-                     "permissions.\n",
-                     arg, pathbuf);
-              break;
-            }
+        while (token != NULL) {
+          printf("Checking token: %s\n", token);
+          if (strcmp(token, arg) == 0) {
+            printf(" --> Match found! '%s' is equal to '%s'\n", token, arg);
+            token = strtok(path_env, PATH_LIST_SEPARATOR);
+            token = NULL;
+            break;
+          } else {
+            printf("No Match\n");
+            token = strtok(NULL, "/");
           }
-
-        } else {
-          printf("PATH env var is not found\n");
+          printf("path_env: %s\n", path_env);
         }
       }
       printf("%s: not found\n", arg);
-
     } else {
       printf("%s: command not found\n", builtin);
     }
