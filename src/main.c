@@ -40,20 +40,18 @@ int main(int argc, char *argv[]) {
         char *token = strtok(path_env, PATH_LIST_SEPARATOR);
 
         while (token != NULL) {
+          token = strtok(NULL, "/");
           printf("Checking token: %s\n", token);
           if (strcmp(token, arg) == 0) {
             printf(" --> Match found! '%s' is equal to '%s'\n", token, arg);
-            token = strtok(path_env, PATH_LIST_SEPARATOR);
-            token = NULL;
             break;
           } else {
             printf("No Match\n");
-            token = strtok(NULL, "/");
+            printf("else block token: %s\n", token);
           }
-          printf("path_env: %s\n", path_env);
         }
+        return 0;
       }
-      printf("%s: not found\n", arg);
     } else {
       printf("%s: command not found\n", builtin);
     }
