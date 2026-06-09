@@ -23,6 +23,8 @@ int main(int argc, char *argv[]) {
 
     char *builtin = strtok(command, " ");
     char *arg = strtok(NULL, "");
+    char *path_env = getenv("PATH");
+    char *token = strtok(path_env, PATH_LIST_SEPARATOR);
     if (builtin == NULL)
       continue;
 
@@ -36,21 +38,18 @@ int main(int argc, char *argv[]) {
         printf("%s is a shell builtin\n", arg);
 
       } else {
-        char *path_env = getenv("PATH");
-        char *token = strtok(path_env, PATH_LIST_SEPARATOR);
+        // char *path_env = getenv("PATH");
+        // char *token = strtok(path_env, PATH_LIST_SEPARATOR);
 
-        while (token != NULL) {
+        while (token != NULL && strcmp(token, arg) != 0) {
           token = strtok(NULL, "/");
           printf("Checking token: %s\n", token);
-          if (strcmp(token, arg) == 0) {
+          if (token != NULL && strcmp(token, arg) == 0 &&
+              access(token, X_OK) == 0) {
             printf(" --> Match found! '%s' is equal to '%s'\n", token, arg);
-            break;
-          } else {
-            printf("No Match\n");
-            printf("else block token: %s\n", token);
           }
+          token = strtok(NULL, "/");
         }
-        return 0;
       }
     } else {
       printf("%s: command not found\n", builtin);
