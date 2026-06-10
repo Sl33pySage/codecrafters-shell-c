@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
       } else {
         while (token != NULL && strcmp(token, arg) != 0) {
           token = strtok_r(NULL, "/", &saveptr);
-          printf("Checking token: %s\n", token);
+          printf("Checking token: %s\nfull path: %s\n", token, saveptr);
           if (token != NULL && strcmp(token, arg) == 0 &&
               access(token, X_OK) == 0) {
             printf("<%s> is <%s>\n", arg, token);
