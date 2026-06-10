@@ -23,8 +23,11 @@ int main(int argc, char *argv[]) {
 
     char *builtin = strtok(command, " ");
     char *arg = strtok(NULL, "");
+
+    char *saveptr;
     char *path_env = getenv("PATH");
-    char *token = strtok(path_env, PATH_LIST_SEPARATOR);
+    char *path_copy = strdup(path_env);
+    char *token = strtok_r(path_copy, PATH_LIST_SEPARATOR, &saveptr);
     if (builtin == NULL)
       continue;
 
@@ -42,14 +45,15 @@ int main(int argc, char *argv[]) {
         // char *token = strtok(path_env, PATH_LIST_SEPARATOR);
 
         while (token != NULL && strcmp(token, arg) != 0) {
-          token = strtok(NULL, "/");
+          token = strtok_r(NULL, "/", &saveptr);
           printf("Checking token: %s\n", token);
           if (token != NULL && strcmp(token, arg) == 0 &&
               access(token, X_OK) == 0) {
             printf(" --> Match found! '%s' is equal to '%s'\n", token, arg);
           }
-          token = strtok(NULL, "/");
+          token = strtok_r(NULL, "/", &saveptr);
         }
+        free(path_copy);
       }
     } else {
       printf("%s: command not found\n", builtin);
