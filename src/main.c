@@ -41,17 +41,17 @@ int main(int argc, char *argv[]) {
         printf("%s is a shell builtin\n", arg);
 
       } else {
-        // char *path_env = getenv("PATH");
-        // char *token = strtok(path_env, PATH_LIST_SEPARATOR);
-
         while (token != NULL && strcmp(token, arg) != 0) {
           token = strtok_r(NULL, "/", &saveptr);
           printf("Checking token: %s\n", token);
           if (token != NULL && strcmp(token, arg) == 0 &&
               access(token, X_OK) == 0) {
-            printf(" --> Match found! '%s' is equal to '%s'\n", token, arg);
+            printf("<%s> is <%s>\n", arg, token);
           }
           token = strtok_r(NULL, "/", &saveptr);
+          if (token == NULL && strcmp(token, arg) != 0) {
+            printf("<%s>: not found\n", arg);
+          }
         }
         free(path_copy);
       }
