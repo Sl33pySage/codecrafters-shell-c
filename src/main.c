@@ -24,10 +24,6 @@ int main(int argc, char *argv[]) {
     char *builtin = strtok(command, " ");
     char *arg = strtok(NULL, "");
 
-    char *saveptr;
-    char *path_env = getenv("PATH");
-    char *path_copy = strdup(path_env);
-    char *token = strtok_r(path_copy, PATH_LIST_SEPARATOR, &saveptr);
     if (builtin == NULL)
       continue;
 
@@ -41,19 +37,21 @@ int main(int argc, char *argv[]) {
         printf("%s is a shell builtin\n", arg);
 
       } else {
+
+        char *path_env = getenv("PATH");
+        char *path_copy = strdup(path_env);
+        char *token = strsep(&path_copy, ":");
+        // printf("token init: %s\n", token);
         while (token != NULL && strcmp(token, arg) != 0) {
-          printf("path_env: %s\n", path_env);
-          token = strtok_r(NULL, "/", &saveptr);
-          printf("token: %s\n", token);
-          if (token != NULL && strcmp(token, arg) == 0 &&
-              access(token, X_OK) == 0) {
+          // token = strtok_r(NULL, "/", &saveptr);
+          if (strcmp(token - 1, arg) == 0 && access(token, X_OK) == 0) {
             printf("%s is %s\n", arg, token);
           }
-          token = strtok_r(NULL, "/", &saveptr);
+          token = strsep(&path_copy, "/");
+          // printf("token: %s\n", token);
         }
 
         printf("%s: not found\n", arg);
-        free(path_copy);
       }
     } else {
       printf("%s: command not found\n", builtin);
