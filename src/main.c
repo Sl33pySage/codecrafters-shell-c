@@ -35,27 +35,7 @@ int main(int argc, char *argv[]) {
       if (!strcmp(arg, "exit") || !strcmp(arg, "echo") ||
           !strcmp(arg, "type")) {
         printf("%s is a shell builtin\n", arg);
-
-      } else {
-
-        char *path_env = getenv("PATH");
-        char *path_copy = strdup(path_env);
-        char *token = strsep(&path_copy, ":");
-        // printf("token init: %s\n", token);
-        while (token != NULL && strcmp(token, arg) != 0) {
-          // token = strtok_r(NULL, "/", &saveptr);
-          if (strcmp(token - 1, arg) == 0 && access(token, X_OK) == 0) {
-            printf("%s is %s\n", arg, token);
-          }
-          token = strsep(&path_copy, "/");
-          // printf("token: %s\n", token);
-        }
-
-        printf("%s: not found\n", arg);
       }
-    } else {
-      printf("%s: command not found\n", builtin);
     }
   }
-  return 0;
 }
