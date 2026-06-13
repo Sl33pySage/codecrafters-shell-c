@@ -21,8 +21,15 @@ int main(int argc, char *argv[]) {
     fgets(command, sizeof(command), stdin);
     command[strcspn(command, "\n")] = '\0';
 
-    char *builtin = strtok(command, " ");
-    char *arg = strtok(NULL, "");
+    // 1. Create a mutable pointer variable to the start of the buffer
+    char *search_ptr = command;
+
+    // 2. Pass the ADDRESS of that pointer variable  (&search_ptr)
+    // strsep will automatically advance search_ptr to the next token
+    char *builtin = strsep(&search_ptr, " ");
+    char *arg = strsep(&search_ptr, ""); // Grabs everything left in the string
+    // char *builtin = strtok(command, " "); OLD STRTOK WAY
+    // char *arg = strtok(NULL, ""); OLD STRTOK WAY
 
     if (builtin == NULL)
       continue;
