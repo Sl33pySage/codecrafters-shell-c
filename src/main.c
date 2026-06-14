@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
     if (builtin == NULL)
       continue;
 
-    if (strcmp(builtin, "exit") == 0) {
+    else if (strcmp(builtin, "exit") == 0) {
       break;
     } else if (strcmp(builtin, "echo") == 0) {
       printf("%s\n", arg);
@@ -42,6 +42,21 @@ int main(int argc, char *argv[]) {
       if (!strcmp(arg, "exit") || !strcmp(arg, "echo") ||
           !strcmp(arg, "type")) {
         printf("%s is a shell builtin\n", arg);
+      } else {
+        char *path = getenv("PATH");
+        char *copied_path = strdup(path);
+        char *tokenized_path = strtok(copied_path, ":");
+        // char *chopped_path = strtok(tokenized_path, "/");
+        //  printf("copied_path: %s\n", copied_path);
+        //  printf("s %s\n", s);
+        //  printf("chopped_path: %s\n", chopped_path);
+        for (int i = 0; i < sizeof(copied_path); i++) {
+          tokenized_path = strtok(NULL, ":");
+          printf("tokenized_path after strtok: %s\n", tokenized_path);
+          if (strcmp(arg, tokenized_path) == 0) {
+            printf("%s is in %s\n", arg, tokenized_path);
+          }
+        }
       }
     }
   }
